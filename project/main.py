@@ -32,8 +32,8 @@ class Lexer:
     def _is_peek_digit(self) -> bool:
         return self._peek().isdigit()
 
-    def _add_token(self, token_type: TokenType, value: int) -> None:
-        self.result.append(Token(token_type, value, 0))
+    def _add_token(self, token_type: TokenType, value: int, location: int) -> None:
+        self.result.append(Token(token_type, value, location))
 
     def tokens(self) -> List[Token]:
         number_buffer = ''
@@ -46,7 +46,7 @@ class Lexer:
                     self.state = StateType.SYMBOL
             elif self.state == StateType.NUMBER:
                 if not self._is_peek_digit():
-                    self._add_token(TokenType.NUMBER, int(number_buffer))
+                    self._add_token(TokenType.NUMBER, int(number_buffer), self.index + 1 - len(number_buffer))
                     number_buffer = ''
                     self.state = StateType.SYMBOL
                     continue
@@ -54,24 +54,24 @@ class Lexer:
                 if self._eol():
                     if self._is_peek_digit():
                         number_buffer += self._consume()
-                    self._add_token(TokenType.NUMBER, int(number_buffer))
+                    self._add_token(TokenType.NUMBER, int(number_buffer), self.index + 2 - len(number_buffer))
                     self.state = StateType.EOL
 
                 number_buffer += self._consume()
 
             elif self.state == StateType.SYMBOL:
                 if self._peek() == '+':
-                    self._add_token(TokenType.PLUS, 0)
+                    self._add_token(TokenType.PLUS, 0, self.index + 1)
                 elif self._peek() == '-':
-                    self._add_token(TokenType.MINUS, 0)
+                    self._add_token(TokenType.MINUS, 0, self.index + 1)
                 elif self._peek() == '*':
-                    self._add_token(TokenType.ASTERISK, 0)
+                    self._add_token(TokenType.ASTERISK, 0, self.index + 1)
                 elif self._peek() == '/':
-                    self._add_token(TokenType.FSLASH, 0)
+                    self._add_token(TokenType.FSLASH, 0, self.index + 1)
                 elif self._peek() == '(':
-                    self._add_token(TokenType.LPAREN, 0)
+                    self._add_token(TokenType.LPAREN, 0, self.index + 1)
                 elif self._peek() == ')':
-                    self._add_token(TokenType.RPAREN, 0)
+                    self._add_token(TokenType.RPAREN, 0, self.index + 1)
                 else:
                     self.state = StateType.NUMBER
                     continue
