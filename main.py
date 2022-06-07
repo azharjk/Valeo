@@ -1,6 +1,6 @@
 import sys
 
-from lexer import Lexer
+from project.lexer import Lexer
 
 if __name__ == '__main__':
     program_name = sys.argv[0]

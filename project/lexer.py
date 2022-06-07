@@ -2,7 +2,6 @@ from enum import Enum, auto
 from typing import List
 
 from project.internal_token import Token, TokenType
-# from internal_token import Token, TokenType
 
 class StateType(Enum):
     BEGIN = auto()
