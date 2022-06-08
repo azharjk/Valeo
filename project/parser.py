@@ -6,7 +6,7 @@ class AstNode:
     def _debug_string(self) -> str:
         pass
 
-    def eval(self) -> int:
+    def eval(self) -> float:
         pass
 
 class NumberNode(AstNode):
@@ -16,7 +16,7 @@ class NumberNode(AstNode):
     def _debug_string(self) -> str:
         return f'{self.value}'
 
-    def eval(self) -> int:
+    def eval(self) -> float:
         return self.value
 
 class BinaryOpNode(AstNode):
@@ -27,35 +27,35 @@ class BinaryOpNode(AstNode):
     def _debug_string(self) -> str:
         pass
 
-    def eval(self) -> int:
+    def eval(self) -> float:
         pass
 
 class AddNode(BinaryOpNode):
     def _debug_string(self) -> str:
         return f'({self.lhs._debug_string()} + {self.rhs._debug_string()})'
 
-    def eval(self) -> int:
+    def eval(self) -> float:
         return self.lhs.eval() + self.rhs.eval()
 
 class SubNode(BinaryOpNode):
     def _debug_string(self) -> str:
         return f'({self.lhs._debug_string()} - {self.rhs._debug_string()})'
 
-    def eval(self) -> int:
+    def eval(self) -> float:
         return self.lhs.eval() - self.rhs.eval()
 
 class MultNode(BinaryOpNode):
     def _debug_string(self) -> str:
         return f'({self.lhs._debug_string()} * {self.rhs._debug_string()})'
 
-    def eval(self) -> int:
+    def eval(self) -> float:
         return self.lhs.eval() * self.rhs.eval()
 
 class DivNode(BinaryOpNode):
     def _debug_string(self) -> str:
         return f'({self.lhs._debug_string()} / {self.rhs._debug_string()})'
 
-    def eval(self) -> int:
+    def eval(self) -> float:
         return self.lhs.eval() / self.rhs.eval()
 
 class Parser:
@@ -91,10 +91,12 @@ class Parser:
 
     def parse_primary(self) -> AstNode:
         token = self._peek()
+        ret = AstNode()
         if token.type == TokenType.NUMBER:
-            return self.parse_number()
-        if token.type == TokenType.LPAREN:
-            return self.parse_paren()
+            ret = self.parse_number()
+        elif token.type == TokenType.LPAREN:
+            ret = self.parse_paren()
+        return ret
 
     def parse_term(self) -> AstNode:
         lhs = self.parse_primary()
