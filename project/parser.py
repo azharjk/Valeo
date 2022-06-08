@@ -131,6 +131,8 @@ class Parser:
             elif token.type == TokenType.MINUS:
                 self._consume()
                 lhs = SubNode(lhs, self.parse_term())
+            elif token.type == TokenType.RPAREN:
+                break
 
         return lhs
 
