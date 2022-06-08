@@ -4,7 +4,7 @@ from project.internal_token import Token, TokenType
 
 class AstNode:
     def _debug_string(self) -> str:
-        pass
+        return 'AstNode::_debug_string()'
 
     def eval(self) -> float:
         pass
