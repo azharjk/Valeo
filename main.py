@@ -1,6 +1,7 @@
 import sys
 
 from project.lexer import Lexer
+from project.parser import Parser
 
 if __name__ == '__main__':
     program_name = sys.argv[0]
@@ -12,4 +13,14 @@ if __name__ == '__main__':
     input = sys.argv[1]
 
     tokens = Lexer(input).tokens()
+    print('[TOKENS]: ')
     print(tokens)
+    print()
+
+    result = Parser(tokens).parse()
+    print('[DEBUG_STRING]: ')
+    print(result._debug_string())
+    print()
+
+    print('[RESULT_EVAL]: ')
+    print(result.eval())
