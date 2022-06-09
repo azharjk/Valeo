@@ -1,6 +1,6 @@
 import unittest
 
-from project.parser import AstNode, NumberNode, Parser
+from project.parser import AddNode, AstNode, DivNode, MultNode, NumberNode, Parser, SubNode
 from project.internal_token import Token, TokenType
 
 class ParserTest(unittest.TestCase):
@@ -105,4 +105,53 @@ class ParserTest(unittest.TestCase):
 
         self.assertEqual(parser.parse_primary()._debug_string(), AstNode()._debug_string())
 
-    # TODO: test unhandled method
+    def test_parse_term_method_mult(self):
+        parser = Parser([
+            Token(TokenType.NUMBER, 5, 1),
+            Token(TokenType.ASTERISK, 0, 2),
+            Token(TokenType.NUMBER, 7, 1),
+        ])
+
+        self.assertEqual(parser.parse_term()._debug_string(), MultNode(NumberNode(5), NumberNode(7))._debug_string())
+
+    def test_parse_term_method_div(self):
+        parser = Parser([
+            Token(TokenType.NUMBER, 5, 1),
+            Token(TokenType.FSLASH, 0, 2),
+            Token(TokenType.NUMBER, 7, 1),
+        ])
+
+        self.assertEqual(parser.parse_term()._debug_string(), DivNode(NumberNode(5), NumberNode(7))._debug_string())
+
+    @unittest.skip('Not implemented yet')
+    def test_parse_term_method_eof(self):
+        parser = Parser([])
+
+        print(parser.parse_term()._debug_string())
+
+    def test_parse_term_method_not_term_thing(self):
+        parser = Parser([
+            Token(TokenType.NUMBER, 9, 1),
+            Token(TokenType.PLUS, 0, 1),
+            Token(TokenType.NUMBER, 9, 1),
+        ])
+
+        self.assertEqual(parser.parse_term()._debug_string(), NumberNode(9)._debug_string())
+
+    def test_parse_expr_method_plus(self):
+        parser = Parser([
+            Token(TokenType.NUMBER, 9, 1),
+            Token(TokenType.PLUS, 0, 1),
+            Token(TokenType.NUMBER, 9, 1),
+        ])
+
+        self.assertEqual(parser.parse_expr()._debug_string(), AddNode(NumberNode(9), NumberNode(9))._debug_string())
+
+    def test_parse_expr_method_minus(self):
+        parser = Parser([
+            Token(TokenType.NUMBER, 9, 1),
+            Token(TokenType.MINUS, 0, 1),
+            Token(TokenType.NUMBER, 9, 1),
+        ])
+
+        self.assertEqual(parser.parse_expr()._debug_string(), SubNode(NumberNode(9), NumberNode(9))._debug_string())
