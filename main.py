@@ -12,6 +12,9 @@ if __name__ == '__main__':
 
     input = sys.argv[1]
 
+    if len(input) == 0:
+        sys.exit(0)
+
     tokens = Lexer(input).tokens()
     print('[TOKENS]: ')
     print(tokens)

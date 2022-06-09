@@ -70,7 +70,6 @@ class LexerTest(unittest.TestCase):
             Token(TokenType.RPAREN, 0, 6)
         ])
 
-    @unittest.skip('Not implemented yet')
     def test_tokens_empty(self):
         lexer = Lexer('')
-        self.assertEqual(lexer.tokens(), [])
+        self.assertRaises(AssertionError, lexer.tokens)

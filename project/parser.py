@@ -137,4 +137,6 @@ class Parser:
         return lhs
 
     def parse(self) -> AstNode:
+        assert len(self.tokens) > self.index, 'Parser: Maybe this is because you put an empty input'
+
         return self.parse_expr()

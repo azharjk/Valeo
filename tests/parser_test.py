@@ -123,12 +123,6 @@ class ParserTest(unittest.TestCase):
 
         self.assertEqual(parser.parse_term()._debug_string(), DivNode(NumberNode(5), NumberNode(7))._debug_string())
 
-    @unittest.skip('Not implemented yet')
-    def test_parse_term_method_eof(self):
-        parser = Parser([])
-
-        print(parser.parse_term()._debug_string())
-
     def test_parse_term_method_not_term_thing(self):
         parser = Parser([
             Token(TokenType.NUMBER, 9, 1),

@@ -37,6 +37,8 @@ class Lexer:
     def tokens(self) -> List[Token]:
         number_buffer = ''
 
+        assert len(self.input) > self.index, 'Lexer: Maybe this is because you put an empty input'
+
         while True:
             if self.state == StateType.BEGIN:
                 if self._is_peek_digit():
