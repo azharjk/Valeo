@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Union
 
 from project.internal_token import Token, TokenType
 
@@ -136,7 +136,8 @@ class Parser:
 
         return lhs
 
-    def parse(self) -> AstNode:
-        assert len(self.tokens) > self.index, 'Parser: Maybe this is because you put an empty input'
+    def parse(self) -> Union[AstNode, None]:
+        if len(self.tokens) == 0:
+            return None
 
         return self.parse_expr()

@@ -62,6 +62,9 @@ class Lexer:
                 number_buffer += self._consume()
 
             elif self.state == StateType.SYMBOL:
+                if self._eol():
+                    self.state = StateType.EOL
+
                 if self._peek() == '+':
                     self._add_token(TokenType.PLUS, 0, self.index + 1)
                 elif self._peek() == '-':
@@ -74,12 +77,12 @@ class Lexer:
                     self._add_token(TokenType.LPAREN, 0, self.index + 1)
                 elif self._peek() == ')':
                     self._add_token(TokenType.RPAREN, 0, self.index + 1)
+                elif self._peek() == ' ':
+                    self._consume()
+                    continue
                 else:
                     self.state = StateType.NUMBER
                     continue
-
-                if self._eol():
-                    self.state = StateType.EOL
 
                 self._consume()
 
