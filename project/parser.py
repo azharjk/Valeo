@@ -1,3 +1,4 @@
+import sys
 from typing import List, Union
 
 from project.internal_token import Token, TokenType
@@ -82,10 +83,17 @@ class Parser:
 
     def parse_paren(self) -> AstNode:
         lparen = self._consume()
+
         assert lparen.type == TokenType.LPAREN
+        if self.index >= len(self.tokens):
+            print(f'ERROR: expected correct expression but got "{lparen.type}" at location {lparen.location}', file=sys.stderr)
+            sys.exit(1)
+
         expr = self.parse_expr()
         rparen = self._consume()
-        assert rparen.type == TokenType.RPAREN
+        if rparen.type != TokenType.RPAREN:
+            print(f'ERROR: unclosed parenthesis at location {lparen.location}', file=sys.stderr)
+            sys.exit(1)
 
         return expr
 
@@ -96,6 +104,9 @@ class Parser:
             ret = self.parse_number()
         elif token.type == TokenType.LPAREN:
             ret = self.parse_paren()
+        else:
+            print(f'ERROR: expected correct expression but got "{token.type}" at location {token.location}', file=sys.stderr)
+            sys.exit(1)
         return ret
 
     def parse_term(self) -> AstNode:
@@ -121,9 +132,6 @@ class Parser:
         lhs = self.parse_term()
 
         while True:
-            if self._eof():
-                break
-
             token = self._peek()
             if token.type == TokenType.PLUS:
                 self._consume()
@@ -132,6 +140,9 @@ class Parser:
                 self._consume()
                 lhs = SubNode(lhs, self.parse_term())
             elif token.type == TokenType.RPAREN:
+                break
+
+            if self._eof():
                 break
 
         return lhs

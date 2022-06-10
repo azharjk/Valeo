@@ -14,8 +14,10 @@ class AppTest(unittest.TestCase):
         self.assertEqual(result, 10)
 
     def test_only_paren(self):
-        result = valeo_eval('()')
-        self.assertEqual(result, None)
+        with self.assertRaises(SystemExit) as cm:
+            valeo_eval('()')
+
+        self.assertEqual(cm.exception.code, 1)
 
     def test_paren_follow_by_expr(self):
         result = valeo_eval('10+(1)')
@@ -33,6 +35,9 @@ class AppTest(unittest.TestCase):
 
         r4 = valeo_eval('(8+8)*25')
         self.assertEqual(r4, 400)
+
+        r5 = valeo_eval('120 * (18) - 45 * (120) + 120 * (32)')
+        self.assertEqual(r5, 600)
 
     def test_whitespaces_input(self):
         r1 = valeo_eval(' 1')
@@ -67,3 +72,7 @@ class AppTest(unittest.TestCase):
 
         r5 = valeo_eval('(  1 + 2  ) * 2')
         self.assertEqual(r5, 6)
+
+    def test_nested_parenthesis(self):
+        result = valeo_eval('(1 + 1- (2*7) + 1) / 2')
+        self.assertEqual(result, -5.5)

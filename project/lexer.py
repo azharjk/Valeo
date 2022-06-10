@@ -1,3 +1,4 @@
+import sys
 from enum import Enum, auto
 from typing import List
 
@@ -80,9 +81,12 @@ class Lexer:
                 elif self._peek() == ' ':
                     self._consume()
                     continue
-                else:
+                elif self._is_peek_digit():
                     self.state = StateType.NUMBER
                     continue
+                else:
+                    print(f'ERROR: unrecognized character "{self._peek()}" at location {self.index + 1}', file=sys.stderr)
+                    sys.exit(1)
 
                 self._consume()
 

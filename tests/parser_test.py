@@ -80,7 +80,10 @@ class ParserTest(unittest.TestCase):
             Token(TokenType.NUMBER, 1, 2),
         ])
 
-        self.assertRaises(AssertionError, parser.parse_paren)
+        with self.assertRaises(SystemExit) as cm:
+            parser.parse_paren()
+
+        self.assertEqual(cm.exception.code, 1)
 
     def test_parse_primary_method_number_case(self):
         parser = Parser([
@@ -103,7 +106,10 @@ class ParserTest(unittest.TestCase):
             Token(TokenType.ASTERISK, 0, 1)
         ])
 
-        self.assertEqual(parser.parse_primary()._debug_string(), AstNode()._debug_string())
+        with self.assertRaises(SystemExit) as cm:
+            parser.parse_primary()
+
+        self.assertEqual(cm.exception.code, 1)
 
     def test_parse_term_method_mult(self):
         parser = Parser([
