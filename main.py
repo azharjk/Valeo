@@ -2,6 +2,7 @@ import sys
 
 from project.lexer import Lexer
 from project.parser import Parser
+from project.valeo import valeo_debug_string, valeo_eval
 
 if __name__ == '__main__':
     program_name = sys.argv[0]
@@ -22,8 +23,8 @@ if __name__ == '__main__':
 
     result = Parser(tokens).parse()
     print('[DEBUG_STRING]: ')
-    print(result._debug_string())
+    print(valeo_debug_string(input))
     print()
 
     print('[RESULT_EVAL]: ')
-    print(result.eval())
+    print(valeo_eval(input))

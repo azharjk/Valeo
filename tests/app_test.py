@@ -4,8 +4,10 @@ from project.valeo import valeo_debug_string, valeo_eval
 
 class AppTest(unittest.TestCase):
     def test_empty_input(self):
-        result = valeo_debug_string('')
-        self.assertEqual(result, None)
+        with self.assertRaises(SystemExit) as cm:
+            valeo_debug_string('')
+
+        self.assertEqual(cm.exception.code, 1)
 
     def test_single_number_in_paren(self):
         result = valeo_eval('(10)')
@@ -32,11 +34,36 @@ class AppTest(unittest.TestCase):
         r4 = valeo_eval('(8+8)*25')
         self.assertEqual(r4, 400)
 
-    @unittest.skip('Not implemented yet')
     def test_whitespaces_input(self):
-        result1 = valeo_eval('1 + 1')
-        self.assertEqual(result1, 2)
+        r1 = valeo_eval(' 1')
+        self.assertEqual(r1, 1)
 
-        result2 = valeo_eval('10 ')
-        self.assertEqual(result2, 42)
+        r2 = valeo_eval('             67')
+        self.assertEqual(r2, 67)
 
+        r3 = valeo_eval('10 ')
+        self.assertEqual(r3, 10)
+
+        r4 = valeo_eval('89                ')
+        self.assertEqual(r4, 89)
+
+        with self.assertRaises(SystemExit) as cm:
+            valeo_eval(' ')
+
+        self.assertEqual(cm.exception.code, 1)
+
+    def test_basic_expression_with_whitespaces(self):
+        r1 = valeo_eval('    1    +   1   ')
+        self.assertEqual(r1, 2)
+
+        r2 = valeo_eval(' 12  * 2  + 3')
+        self.assertEqual(r2, 27)
+
+        r3 = valeo_eval('2 * 2')
+        self.assertEqual(r3, 4)
+
+        r4 = valeo_eval('5 + 2 * 2  ')
+        self.assertEqual(r4, 9)
+
+        r5 = valeo_eval('(  1 + 2  ) * 2')
+        self.assertEqual(r5, 6)
