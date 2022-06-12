@@ -1,3 +1,4 @@
+from cmath import exp
 import sys
 from typing import List, Union
 
@@ -161,4 +162,8 @@ class Parser:
         if len(self.tokens) == 0:
             return None
 
-        return self.parse_expr()
+        try:
+            return self.parse_expr()
+        except RecursionError:
+            print(f'ERROR: invalid expression', file=sys.stderr)
+            sys.exit(1)

@@ -36,3 +36,14 @@ class ErrorTest(unittest.TestCase):
             valeo_eval('(8 + (1 + 1)')
 
         self.assertEqual(cm.exception.code, 1)
+
+    def test_lparen_recursion(self):
+        with self.assertRaises(SystemExit) as cm:
+            valeo_eval('(')
+
+        self.assertEqual(cm.exception.code, 1)
+
+        with self.assertRaises(SystemExit) as cm:
+            valeo_eval('1+(')
+
+        self.assertEqual(cm.exception.code, 1)
