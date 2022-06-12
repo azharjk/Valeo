@@ -31,7 +31,6 @@ class ErrorTest(unittest.TestCase):
 
         self.assertEqual(cm.exception.code, 1)
 
-    @unittest.skip('Unhandled yet')
     def test_nested_unclosed_parethesis(self):
         with self.assertRaises(SystemExit) as cm:
             valeo_eval('(8 + (1 + 1)')

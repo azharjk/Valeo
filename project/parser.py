@@ -90,10 +90,16 @@ class Parser:
             sys.exit(1)
 
         expr = self.parse_expr()
-        rparen = self._consume()
-        if rparen.type != TokenType.RPAREN:
+
+        rparen = None
+        if not self.index >= len(self.tokens):
+            rparen = self._peek()
+
+        if rparen is None or rparen.type != TokenType.RPAREN:
             print(f'ERROR: unclosed parenthesis at location {lparen.location}', file=sys.stderr)
             sys.exit(1)
+
+        self.index += 1
 
         return expr
 
@@ -132,7 +138,11 @@ class Parser:
         lhs = self.parse_term()
 
         while True:
-            token = self._peek()
+            try:
+                token = self._peek()
+            except IndexError:
+                break
+
             if token.type == TokenType.PLUS:
                 self._consume()
                 lhs = AddNode(lhs, self.parse_term())
